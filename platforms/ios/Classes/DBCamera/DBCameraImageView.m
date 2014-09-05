@@ -34,6 +34,16 @@
 @end
 
 @implementation DBCameraImageView
+-(void) setImage:(UIImage*) newImage {
+    [super setImage:newImage];
+    _originalImage=[newImage copy];
+    _filteredImage=newImage;
+}
+-(void) setFilteredImage:(UIImage*) newImage {
+    [super setImage:newImage];
+    _filteredImage=newImage;
+}
+
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -64,7 +74,9 @@
         UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
         UIRotationGestureRecognizer *rotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotate:)];
-        self.gestureRecognizers = @[  pinch, pan,rotate ];
+        UILongPressGestureRecognizer *press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+        
+        self.gestureRecognizers = @[  pinch, pan,rotate,press ];
         for (UIGestureRecognizer *recognizer in self.gestureRecognizers)
             recognizer.delegate = self;
     }
@@ -101,6 +113,19 @@
     self.transform = CGAffineTransformRotate(self.transform, 0);
     self.transform = CGAffineTransformScale(self.transform, 1, 1);
 }
+- (void) handleLongPress:(UILongPressGestureRecognizer *)gesture
+{
+    if ( !self.isGesturesEnabled )
+        return;
+    if(gesture.state==UIGestureRecognizerStateEnded){
+        [super setImage:_filteredImage];
+    }else{
+        [super setImage:_originalImage];
+    }
+    
+    
+}
+
 
 - (void) handlePinch:(UIPinchGestureRecognizer *)gesture
 {
@@ -229,6 +254,14 @@
         if(frontierCode[i]==0){
             return pow(2,i+1)+1;
         }
+    }
+    //test if all frontier codes are in the same side
+    int same=frontierCode[0];
+    for(int i=1;i<5;i++){
+        same=same&frontierCode[i];
+    }
+    if(same){
+        return 1;
     }
     
     int result=0;

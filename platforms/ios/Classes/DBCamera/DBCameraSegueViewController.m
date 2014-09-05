@@ -44,16 +44,32 @@
     
     [_containerView.imageView setImage:self.capturedImage];
     
-/*    UIImage *thumb=[UIImage createRoundedRectImage:self.capturedImage size:CGSizeMake(63.0f,63.0f) roundRadius:4 ];
-    for (int i=0; i<4; i++) {
-        [[_containerView filterButton:i ] setBackgroundImage:thumb forState:UIControlStateNormal];
-    }*/
-    
-    CGFloat newWidth = [self getNewWidth];
-    CGFloat newX = ((CGRectGetWidth([[UIScreen mainScreen] bounds])) * .5) - (newWidth * .5);
-    [_containerView.imageView setFrame2:(CGRect){ newX,0,newWidth,
-        CGRectGetHeight(_containerView.frame) } viewport:CGRectMake(0, 65, 320, 320)];
-    [_containerView.imageView setDefaultCenter:_containerView.imageView.center];
+    if([_origin isEqual:@"LIBRARY"]){
+        CGSize dimensions= self.capturedImage.size;
+        CGFloat newWidth=320.0;
+        CGFloat newHeight=320.0;
+        CGFloat newX=0.0;
+        CGFloat newY=0.0;
+        CGRect usedViewport=CGRectMake(0, 65, 320, 320);
+        if(dimensions.height>dimensions.width){
+            newWidth=usedViewport.size.width;
+            newHeight=dimensions.height*newWidth/dimensions.width;
+        }else{
+            newHeight=usedViewport.size.height;
+            newWidth=dimensions.width*newHeight/dimensions.height;
+        }
+        
+        newX=usedViewport.size.width/2-newWidth/2+usedViewport.origin.x;
+        newY=usedViewport.size.height/2-newHeight/2+usedViewport.origin.y;
+        [_containerView.imageView setFrame2:(CGRect){ newX,newY,newWidth,newHeight} viewport:usedViewport];
+        [_containerView.imageView setDefaultCenter:_containerView.imageView.center];
+    }else{
+        CGFloat newWidth = [self getNewWidth];
+        CGFloat newX = ((CGRectGetWidth([[UIScreen mainScreen] bounds])) * .5) - (newWidth * .5);
+        [_containerView.imageView setFrame2:(CGRect){ newX,0,newWidth,
+            CGRectGetHeight(_containerView.frame) } viewport:CGRectMake(0, 65, 320, 320)];
+        [_containerView.imageView setDefaultCenter:_containerView.imageView.center];
+    }
 }
 
 - (CGFloat) getNewHeight
@@ -79,6 +95,11 @@
 - (void) setCapturedImage:(UIImage *)capturedImage
 {
     _capturedImage = capturedImage;
+}
+
+- (void) setOrigin:(NSString *)origin
+{
+    _origin=origin;
 }
 
 #pragma mark - DBCameraViewDelegate

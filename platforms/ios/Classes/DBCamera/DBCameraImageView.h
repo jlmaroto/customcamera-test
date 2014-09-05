@@ -15,9 +15,12 @@
 @property (nonatomic, assign) CGFloat scale;
 @property (nonatomic, assign) CGFloat tx;
 @property (nonatomic, assign) CGFloat ty;
+@property (nonatomic, strong) UIImage* originalImage;
+@property (nonatomic, strong) UIImage* filteredImage;
 
 
 - (void) resetPosition;
 - (void) setFrame2:(CGRect)frame viewport:(CGRect)viewport;
+- (void) setFilteredImage:(UIImage*) newImage;
 
 @end

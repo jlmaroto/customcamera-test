@@ -9,11 +9,15 @@
 #import "DBCameraSegueView.h"
 #import "DBCameraImageView.h"
 #import "DBCameraMacros.h"
+#import "DBFilterCollectionViewCell.h"
+#import "DBFilterCollectionViewFlowLayout.h"
+#import "GPUImage.h"
 
 #ifndef DBCameraLocalizedStrings
 #define DBCameraLocalizedStrings(key) \
 NSLocalizedStringFromTable(key, @"DBCamera", nil)
 #endif
+#define kItemIdentifier @"Filters"
 
 #define buttonMargin 20.0f
 #define kCropStripeHeight (IS_RETINA_4 ? 154 : 110)
@@ -48,9 +52,10 @@ NSLocalizedStringFromTable(key, @"DBCamera", nil)
 @end
 
 
-@interface DBCameraSegueView () {
+@interface DBCameraSegueView () <UICollectionViewDataSource, UICollectionViewDelegate> {
+    NSMutableArray *_items;
+    UICollectionView *_collectionView;
     StripeView *_topStripe, *_bottomStripe;
-    UIButton *_filterButtons[4];
 }
 @end
 
@@ -60,12 +65,14 @@ NSLocalizedStringFromTable(key, @"DBCamera", nil)
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _items = [NSMutableArray array];
+        
         [self setUserInteractionEnabled:YES];
         UIView *transformView =[[UIView alloc] initWithFrame:self.bounds];
         
         _imageView = [[DBCameraImageView alloc] initWithFrame:(CGRect){ 0, 65, 320,320}];
         [_imageView setBackgroundColor:[UIColor clearColor]];
-        //[_imageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
+        [_imageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
         [_imageView setContentMode:UIViewContentModeScaleToFill];
         [transformView addSubview:_imageView];
         [self addSubview:transformView];
@@ -77,18 +84,57 @@ NSLocalizedStringFromTable(key, @"DBCamera", nil)
         [self addSubview:_topStripe];
         
         _bottomStripe = [[StripeView alloc] initWithFrame:(CGRect){ 0, 385, CGRectGetWidth(frame), CGRectGetHeight(frame)-385 }];
-        [_bottomStripe setHidden:YES];
+        
+        _collectionView = [[UICollectionView alloc] initWithFrame:(CGRect){ 2, 20, CGRectGetWidth(frame)-4, 106 } collectionViewLayout:[[DBFilterCollectionViewFlowLayout alloc] init]];
+        [_collectionView setAutoresizingMask:UIViewAutoresizingNone];
+        [_collectionView setDelegate:self];
+        [_collectionView setDataSource:self];
+        [_collectionView setBackgroundColor:[UIColor clearColor]];
+        [_collectionView setShowsHorizontalScrollIndicator:NO];
+        [_collectionView registerClass:[DBFilterCollectionViewCell class] forCellWithReuseIdentifier:kItemIdentifier];
+        [_bottomStripe addSubview:_collectionView];
+        //[_bottomStripe setHidden:YES];
 /*        for(int i=0;i<4;i++){
             [_bottomStripe addSubview:[self filterButton:i]];
             [_filterButtons[i] addTarget:self action:@selector(useFilterAction:) forControlEvents:UIControlEventTouchUpInside];
         }
 */
         [self addSubview:_bottomStripe];
+        
         [self setCropMode:YES];
+        [self getFilters];
     }
     return self;
 }
-
+- (void) getFilters
+{
+    /*[_items addObjectsFromArray:@[@{@"image":@"wave_00.jpg",@"title":@"Normal",@"filter":@[]}
+                                  ,@{@"image":@"wave_01.jpg",@"title":@"Mundaka",@"filter":@[]}
+                                  ,@{@"image":@"wave_02.jpg",@"title":@"Oahu",@"filter":@[]}
+                                  ,@{@"image":@"wave_03.jpg",@"title":@"Jeffrey's",@"filter":@[]}
+                                  ,@{@"image":@"wave_04.jpg",@"title":@"Hossegor",@"filter":@[]}
+                                  ,@{@"image":@"wave_05.jpg",@"title":@"Ulluwatu",@"filter":@[]}
+                                  ,@{@"image":@"wave_06.jpg",@"title":@"Mundaka 1",@"filter":@[]}
+                                  ,@{@"image":@"wave_07.jpg",@"title":@"Oahu 1",@"filter":@[]}
+                                  ,@{@"image":@"wave_08.jpg",@"title":@"Jeffrey's 1",@"filter":@[]}
+                                  ,@{@"image":@"wave_09.jpg",@"title":@"Hossegor 1",@"filter":@[]}
+                                  ,@{@"image":@"wave_10.jpg",@"title":@"Ulluwatu 1",@"filter":@[]}
+                                  ,@{@"image":@"wave_11.jpg",@"title":@"Mundaka 2",@"filter":@[]}
+                                  ]];
+    */
+    NSString *jsonPath = [[NSBundle mainBundle] pathForResource:@"filters" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:jsonPath];
+    NSError *error = nil;
+    _items = [NSJSONSerialization JSONObjectWithData:data
+                                             options:kNilOptions
+                                               error:&error];
+    
+    
+    [_collectionView reloadData];
+    NSIndexPath *selection = [NSIndexPath indexPathForItem:0 inSection:0];
+    [_collectionView selectItemAtIndexPath:selection animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+    
+}
 - (void) buildButtonInterface
 {
     [self addSubview:self.stripeView];
@@ -169,34 +215,135 @@ NSLocalizedStringFromTable(key, @"DBCamera", nil)
     
     return _cropButton;
 }
--(UIButton *) filterButton:(int) i
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
 {
-    if(!_filterButtons[i]){
-        _filterButtons[i] = [UIButton buttonWithType:UIButtonTypeCustom];
-        _filterButtons[i].tag=i;
-        [_filterButtons[i] setBackgroundColor:RGBColor(0xffffff, .1)];
-        [_filterButtons[i].layer setCornerRadius:4];
-        [_filterButtons[i].layer setBorderWidth:1];
-        [_filterButtons[i].layer setBorderColor:RGBColor(0xffffff, .3).CGColor];
-        [_filterButtons[i] setFrame:(CGRect){  15+75*i, 50 - 32.5f, 65, 65 }];
+    return _items.count;
+}
+
+- (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    DBFilterCollectionViewCell *item = [collectionView dequeueReusableCellWithReuseIdentifier:kItemIdentifier forIndexPath:indexPath];
+    [item.itemImage setImage:nil];
+    
+    if ( _items.count > 0) {
+        NSLog(@"%d %@ %@",indexPath.item,[_items[indexPath.item] objectForKey:@"image"],[_items[indexPath.item] objectForKey:@"title"]);
+        [item.itemImage setImage:[UIImage imageNamed:[_items[indexPath.item] objectForKey:@"image"]]];
+        [item.itemLabel setText:[_items[indexPath.item] objectForKey:@"title"]];
+        if(item.selected){
+            item.itemImage.layer.borderWidth=3.0;
+        }else{
+            item.itemImage.layer.borderWidth=0.0;
+        }
+    }
+    
+    return item;
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    GPUImageOutput<GPUImageInput> *gpuFilter;
+    ((DBFilterCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath]).itemImage.layer.borderWidth=3;
+    
+    NSDictionary *filtro= _items[indexPath.item];
+    NSArray *filter=((NSArray *)[filtro objectForKey:@"filter"]);
+    
+    if(filter.count==0){
+        [_imageView setFilteredImage:[_imageView.originalImage copy]];
+        
+    }else{
+        
+        NSMutableArray *results=[[NSMutableArray alloc] init];
+        NSMutableArray *inputPictures=[[NSMutableArray alloc] init];
+        for (NSDictionary *step in filter) {
+            if ([[step objectForKey:@"type"] isEqual:@"input"]) {
+                if ([[step objectForKey:@"from"] isEqual:@"camera"]) {
+                    GPUImagePicture *input=[[GPUImagePicture alloc] initWithImage:[_imageView.originalImage copy]];
+                    [inputPictures addObject:input];
+                    
+                    if([[step objectForKey:@"cropped"] isEqual:@"true"]){
+                       // GPUImageCropFilter *crop=[[GPUImageCropFilter alloc] initWithCropRegion:<#(CGRect)#>];
+                    }else{
+                        [results setObject:input  atIndexedSubscript:[[step objectForKey:@"node"] integerValue]];
+                    }
+                }else if ([[step objectForKey:@"from"] isEqual:@"resource"]) {
+                    GPUImagePicture *resource=[[GPUImagePicture alloc] initWithImage:[UIImage imageNamed:[step objectForKey:@"name"]]] ;
+                    [resource processImage];
+                    [results setObject:resource atIndexedSubscript:[[step objectForKey:@"node"] integerValue]];
+                    [inputPictures addObject:resource];
+                }else if ([[step objectForKey:@"from"] isEqual:@"color"]) {
+                    GPUImageSolidColorGenerator* generator = [GPUImageSolidColorGenerator new];
+                    [generator setColorRed:[[step objectForKey:@"red"] floatValue] green:[[step objectForKey:@"green"] floatValue] blue:[[step objectForKey:@"blue"] floatValue] alpha:[[step objectForKey:@"alpha"] floatValue]];
+                    [generator forceProcessingAtSize:_imageView.originalImage.size];
+                   
+                    [results setObject:generator atIndexedSubscript:[[step objectForKey:@"node"] integerValue]];
+
+                }
+            }else if([[step objectForKey:@"type"] isEqual:@"output"]){
+                GPUImageFilter *f=[results objectAtIndex:[[step objectForKey:@"nodeId"] integerValue]];
+                [f useNextFrameForImageCapture];
+                for(id pic in inputPictures){
+                    [pic processImage];
+                }
+                [_imageView setFilteredImage:[f imageFromCurrentFramebufferWithOrientation:_imageView.originalImage.imageOrientation]];
+            }else if([[step objectForKey:@"type"] isEqual:@"blend"]){
+                if ([[step objectForKey:@"name"] isEqual:@"overlay"]) {
+                    GPUImageOverlayBlendFilter *overlay = [[GPUImageOverlayBlendFilter alloc] init];
+                    
+                    NSArray *inputs=[step objectForKey:@"inputs"];
+                    for(id i in inputs){
+                        [[results objectAtIndex:[i intValue]] addTarget:overlay];
+                    }
+                    [results setObject:overlay  atIndexedSubscript:[[step objectForKey:@"node"] integerValue]];
+                }else if ([[step objectForKey:@"name"] isEqual:@"screen"]) {
+                    GPUImageScreenBlendFilter *screen = [[GPUImageScreenBlendFilter alloc] init];
+                    
+                    NSArray *inputs=[step objectForKey:@"inputs"];
+                    for(id i in inputs){
+                        [[results objectAtIndex:[i intValue]] addTarget:screen];
+                    }
+                    [results setObject:screen  atIndexedSubscript:[[step objectForKey:@"node"] integerValue]];
+                }else if ([[step objectForKey:@"name"] isEqual:@"multiply"]) {
+                    GPUImageMultiplyBlendFilter *multiply = [[GPUImageMultiplyBlendFilter alloc] init];
+                    
+                    NSArray *inputs=[step objectForKey:@"inputs"];
+                    for(id i in inputs){
+                        [[results objectAtIndex:[i intValue]] addTarget:multiply];
+                        
+                    }
+                    [results setObject:multiply  atIndexedSubscript:[[step objectForKey:@"node"] integerValue]];
+                }
+            }else if([[step objectForKey:@"type"] isEqual:@"effect"]){
+                if ([[step objectForKey:@"name"] isEqual:@"levels"]) {
+                    GPUImageLevelsFilter *effect=[[GPUImageLevelsFilter alloc] init];
+                    
+                    
+                    NSArray *inputs=[step objectForKey:@"inputs"];
+                    for(id i in inputs){
+                        [[results objectAtIndex:[i intValue]] addTarget:effect];
+                    }
+                    [effect setMin:[[step objectForKey:@"dark" ] floatValue] gamma:[[step objectForKey:@"medium" ] floatValue] max:[[step objectForKey:@"light" ] floatValue]];
+                    
+                    [results setObject:effect  atIndexedSubscript:[[step objectForKey:@"node"] integerValue]];
+
+                }
+            }
+        }
+        
         
     }
-    return _filterButtons[i];
+    
+    
 }
--(void) setFilter:(int)i
+- (void) collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(_filterNumber>-1&&_filterNumber!=i){
-        [_filterButtons[_filterNumber] setSelected:NO];
-    }
-    _filterNumber=i;
-    
-    if(i>-1){
-        [_filterButtons[_filterNumber] setSelected:YES];
-        if ( [_delegate respondsToSelector:@selector(useFilter:)] )
-            [_delegate useFilter:i];
-    }
-    
+    ((DBFilterCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath]).itemImage.layer.borderWidth=0;
 }
+
 #pragma mark - Methods
 
 - (void) retakePhoto
