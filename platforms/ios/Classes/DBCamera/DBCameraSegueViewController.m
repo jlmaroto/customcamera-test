@@ -70,6 +70,7 @@
             CGRectGetHeight(_containerView.frame) } viewport:CGRectMake(0, 65, 320, 320)];
         [_containerView.imageView setDefaultCenter:_containerView.imageView.center];
     }
+    _containerView.cropedImage=[[UIImage screenshotFromView:_containerView] croppedImage:(CGRect){ 0, 130, 640, 640 }];
 }
 
 - (CGFloat) getNewHeight
@@ -112,11 +113,17 @@
 - (void) useImageFromCameraView:(DBCameraSegueView *)cameraView
 {
     if ( [cameraView isCropModeOn] ) {
+        NSMutableDictionary *newDict = [[NSMutableDictionary alloc] init];
+        NSNumber *orientation= [NSNumber numberWithInt: UIImageOrientationUp] ;
+        [newDict addEntriesFromDictionary: self.capturedImageMetadata];
+        [newDict setObject:orientation forKey:@"Orientation"];
         if ( [_delegate respondsToSelector:@selector(captureImageDidFinish:withMetadata:)] ){
-            //NSNumber *orientation= [NSNumber numberWithInt: 0] ;
-            //[self.capturedImageMetadata setValue:orientation forKey:@"Orientation"];
             
-            [_delegate captureImageDidFinish:[[UIImage screenshotFromView:self.view] croppedImage:(CGRect){ 0, 130, 640, 640 }] withMetadata:self.capturedImageMetadata];
+            if(cameraView.filterView.filteredImage!=nil){
+            [_delegate captureImageDidFinish:cameraView.filterView.filteredImage withMetadata:newDict];
+            }else{
+                [_delegate captureImageDidFinish:[[UIImage screenshotFromView:self.view] croppedImage:(CGRect){ 0, 130, 640, 640 }] withMetadata:newDict];
+            }
         }
     } else if ( [_delegate respondsToSelector:@selector(captureImageDidFinish:withMetadata:)] )
         [_delegate captureImageDidFinish:self.capturedImage withMetadata:self.capturedImageMetadata];

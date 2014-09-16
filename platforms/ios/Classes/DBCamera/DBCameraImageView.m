@@ -29,6 +29,8 @@
     CGPoint translationDelta;
     
     CGPoint backVector;
+    
+    int activeGestures;
 }
 
 @end
@@ -37,12 +39,8 @@
 -(void) setImage:(UIImage*) newImage {
     [super setImage:newImage];
     _originalImage=[newImage copy];
-    _filteredImage=newImage;
 }
--(void) setFilteredImage:(UIImage*) newImage {
-    [super setImage:newImage];
-    _filteredImage=newImage;
-}
+
 
 
 - (id)initWithFrame:(CGRect)frame
@@ -60,6 +58,8 @@
         _lastScale = 1.0f;
         _rotation=0.0f;
         _lastRotation = 0.0f;
+        
+        activeGestures=0;
         
         
         corners[0]=CGPointMake(CGRectGetWidth(self.frame)/-2, CGRectGetHeight(self.frame)/-2);
@@ -112,18 +112,34 @@
     self.transform = CGAffineTransformMakeTranslation(0, 0);
     self.transform = CGAffineTransformRotate(self.transform, 0);
     self.transform = CGAffineTransformScale(self.transform, 1, 1);
+    [self countGestureBegin];
+    [self countGestureEnd];
+}
+-(void) countGestureBegin{
+    id<DBCameraImageViewDelegate> strongDelegate = self.delegate;
+    
+    activeGestures++;
+    if (activeGestures==1&&[strongDelegate respondsToSelector:@selector(DBCameraImageView:didMove:)]) {
+        [strongDelegate DBCameraImageView:self didMove:activeGestures];
+    }
+}
+-(void) countGestureEnd{
+    id<DBCameraImageViewDelegate> strongDelegate = self.delegate;
+    
+    activeGestures--;
+    if (activeGestures==0&&[strongDelegate respondsToSelector:@selector(DBCameraImageView:didEndMove:)]) {
+        [strongDelegate DBCameraImageView:self didEndMove:activeGestures];
+    }
 }
 - (void) handleLongPress:(UILongPressGestureRecognizer *)gesture
 {
     if ( !self.isGesturesEnabled )
         return;
     if(gesture.state==UIGestureRecognizerStateEnded){
-        [super setImage:_filteredImage];
-    }else{
-        [super setImage:_originalImage];
+        [self countGestureEnd];
+    }else if(gesture.state==UIGestureRecognizerStateBegan){
+        [self countGestureBegin];
     }
-    
-    
 }
 
 
@@ -132,11 +148,16 @@
     if ( !self.isGesturesEnabled )
         return;
     
+    if(gesture.state == UIGestureRecognizerStateBegan){
+        [self countGestureBegin];
+    }
     if( gesture.state == UIGestureRecognizerStateEnded ) {
 		_lastScale = 1.0f;
 //        if ( CGRectGetWidth(self.frame) < SIZE_LIMIT || CGRectGetHeight(self.frame) < SIZE_LIMIT )
 //            [self resetPosition];
-		return;
+        [self countGestureEnd];
+        
+        return;
 	}
     
 	_scale = 1.0f - (_lastScale - [gesture scale]);
@@ -158,9 +179,12 @@
 {
 	if ( !self.isGesturesEnabled )
         return;
-    
+
     UIView *piece = [gesture view];
     
+    if(gesture.state == UIGestureRecognizerStateBegan){
+        [self countGestureBegin];
+    }
     
     
     if ( gesture.state == UIGestureRecognizerStateBegan || gesture.state == UIGestureRecognizerStateChanged ) {
@@ -185,6 +209,7 @@
             backVector.x=0;
             backVector.y=0;
         }
+        [self countGestureEnd];
     }
     
 }
@@ -197,8 +222,12 @@
 		_lastRotation = 0.0f;
         //        if ( CGRectGetWidth(self.frame) < SIZE_LIMIT || CGRectGetHeight(self.frame) < SIZE_LIMIT )
         //            [self resetPosition];
+        [self countGestureEnd];
+        
 		return;
-	}
+	}else if(gesture.state == UIGestureRecognizerStateBegan){
+        [self countGestureBegin];
+    }
     
 	_rotation = 0.0f - (_lastRotation - [gesture rotation]);
     
@@ -307,6 +336,7 @@
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
+    
 	return YES;
 }
 

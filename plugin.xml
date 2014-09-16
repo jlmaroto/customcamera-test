@@ -14,11 +14,11 @@
 </info>
 
 <js-module src="www/js/custom_camera2.js" name="CustomCamera2">
-	<clobbers target="navigator.CustomCamera2" />
+	<clobbers target="navigator.CustomCamera2"/>
 </js-module>
 
 <engines>
-	<engine name="cordova" version=">=3.1.0" />
+	<engine name="cordova" version=">=3.1.0"/>
 </engines>
 
 <platform name="ios">
@@ -26,42 +26,49 @@
 	<!-- config file -->
 	<config-file target="config.xml" parent="/*">
 		<feature name="CustomCamera2">
-			<param name="ios-package" value="CustomCamera2" />
+			<param name="ios-package" value="CustomCamera2"/>
 		</feature>
 	</config-file>
 
 	<!-- core CustomCamera header and source files -->
-	<header-file src="platforms/ios/Classes/CustomCamera2.h" />
-	<source-file src="platforms/ios/Classes/CustomCamera2.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraContainer.h" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraImageView.h" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraManager.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraSegueViewController.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCollectionViewCell.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBLibraryManager.m" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraContainer.m" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraImageView.m" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraManager.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraView.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCollectionViewCell.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraDelegate.h" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraLibrary.h" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraSegueView.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraView.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCollectionViewFlowLayout.h" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraGridView.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraLibrary.m" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraSegueView.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraViewController.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCollectionViewFlowLayout.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/UIImage+Crop.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraGridView.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraMacros.h" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBCameraSegueViewController.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/DBCameraViewController.m" />
-	<header-file src="platforms/ios/Classes/DBCamera/DBLibraryManager.h" />
-	<source-file src="platforms/ios/Classes/DBCamera/UIImage+Crop.m" />
+	<header-file src="platforms/ios/Classes/CustomCamera2.h"/>
+	<source-file src="platforms/ios/Classes/CustomCamera2.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraContainer.h"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraImageView.h"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraManager.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraSegueViewController.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCollectionViewCell.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBLibraryManager.m"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraContainer.m"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraImageView.m"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraManager.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraView.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCollectionViewCell.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraDelegate.h"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraLibrary.h"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraSegueView.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraView.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCollectionViewFlowLayout.h"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraGridView.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraLibrary.m"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraSegueView.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraViewController.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCollectionViewFlowLayout.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/UIImage+Crop.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraGridView.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraMacros.h"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBCameraSegueViewController.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBCameraViewController.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBLibraryManager.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/UIImage+Crop.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBEventlessView.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBEventlessView.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBFilterCollectionViewCell.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBFilterCollectionViewCell.m"/>
+	<header-file src="platforms/ios/Classes/DBCamera/DBFilterCollectionViewFlowLayout.h"/>
+	<source-file src="platforms/ios/Classes/DBCamera/DBFilterCollectionViewFlowLayout.m"/>
 	
+
 	<!--GPUImage used for filters-->
 	<header-file src="platforms/ios/Classes/GPUImage/GLProgram.h"/>
         <source-file src="platforms/ios/Classes/GPUImage/GLProgram.m"/>
@@ -391,28 +398,56 @@
         <header-file src="platforms/ios/Classes/GPUImage/iOS/GPUImageView.h"/>
         <source-file src="platforms/ios/Classes/GPUImage/iOS/GPUImageView.m"/>        
 
-	<resource-file src="platforms/ios/Classes/DBCamera/Localizations/es.lproj/DBCamera.strings"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/DBCameraImages.xcassets"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_Crop.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_Crop@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_CropSelected.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_CropSelected@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_cameraGridNormal.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_cameraGridNormal@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_cameraGridSelected.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_cameraGridSelected@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_close@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flash-auto@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flash-no@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flash@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flip@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flipSelected.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flipSelected@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_skip@2x.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_trigger.png"  />
-        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_trigger@2x.png"  />
+	<resource-file src="platforms/ios/Classes/DBCamera/Localizations/es.lproj/DBCamera.strings" targetDir="Resources/es.lproj"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Localizations/en.lproj/DBCamera.strings" targetDir="Resources/en.lproj"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Localizations/it.lproj/DBCamera.strings" targetDir="Resources/it.lproj"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/DBCameraImages.xcassets"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_Crop.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_Crop@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_CropSelected.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_CropSelected@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_cameraGridNormal.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_cameraGridNormal@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_cameraGridSelected.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_cameraGridSelected@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_close@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flash-auto@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flash-no@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flash@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flip@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flipSelected.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_flipSelected@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_skip@2x.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_trigger.png"/>
+        <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_trigger@2x.png"/>
 	
-	<framework src="QuartzCore.framework" />
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/ficon_normal.jpg"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/filters.json"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/icon_jbay.jpg"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/icon_mundaka.jpg"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/icon_santacruz.jpg"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/icon_sunset.jpg"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/icon_tamarindo.jpg"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/icon_ulluwatu.jpg"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/J-BAY/Gradient-Fill-multiplay.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/J-BAY/gradient_overlay.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/J-BAY/noise_multiply.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/SANTACRUZ/santacruz_lookup_1.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/SANTACRUZ/santacruz_lookup_2.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/SANTACRUZ/santacruz_vineta_overlay.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/sunset/SG_sunset"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/sunset/sunset_gradient_lighten.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/sunset/sunset_gradient_overlay.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/sunset/sunset_lookup.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/sunset/sunset_lookup_hue_colorBalance_levesl.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/sunset/sunset_texture_multiply.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/tamarindo/tamarindo_lookup.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/tamarindo/vineta_tamarindo_overlay.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/ulluwatu/ULLUWATU_lookup.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/ulluwatu/ulluwatu_texture_1.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/ulluwatu/ulluwatu_texture_2.png"/>
+
+	<framework src="QuartzCore.framework"/>
 </platform>
 
 </plugin>
