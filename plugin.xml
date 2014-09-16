@@ -418,6 +418,8 @@
         <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_skip@2x.png"/>
         <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_trigger.png"/>
         <resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_trigger@2x.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_back@2x.png"/>
+	<resource-file src="platforms/ios/Classes/DBCamera/Resources/CC2_use@2x.png"/>
 	
 	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/ficon_normal.jpg"/>
 	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/filters.json"/>

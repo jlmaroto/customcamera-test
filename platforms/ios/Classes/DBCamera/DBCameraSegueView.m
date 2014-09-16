@@ -197,10 +197,10 @@ NSLocalizedStringFromTable(key, @"DBCamera", nil)
 {
     if ( !_retakeButton ) {
         _retakeButton = [self baseButton];
-        [_retakeButton setTitle:DBCameraLocalizedStrings(@"button.retake") forState:UIControlStateNormal];
-        [_retakeButton.titleLabel sizeToFit];
-        [_retakeButton sizeToFit];
-        [_retakeButton setFrame:(CGRect){ 0, 0, CGRectGetWidth(_retakeButton.frame) + buttonMargin, 60 }];
+        [_retakeButton setImage:[UIImage imageNamed:@"CC2_back"] forState:UIControlStateNormal];
+        [_retakeButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [_retakeButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [_retakeButton setFrame:(CGRect){ buttonMargin, 15, 38 , 34 }];
     }
     
     return _retakeButton;
@@ -210,10 +210,10 @@ NSLocalizedStringFromTable(key, @"DBCamera", nil)
 {
     if ( !_useButton ) {
         _useButton = [self baseButton];
-        [_useButton setTitle:DBCameraLocalizedStrings(@"button.use") forState:UIControlStateNormal];
-        [_useButton.titleLabel sizeToFit];
-        [_useButton sizeToFit];
-        [_useButton setFrame:(CGRect){ CGRectGetWidth(self.frame) - (CGRectGetWidth(_useButton.frame) + buttonMargin), 0, CGRectGetWidth(_useButton.frame) + buttonMargin, 60 }];
+        [_useButton setImage:[UIImage imageNamed:@"CC2_use"] forState:UIControlStateNormal];
+        [_useButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [_useButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [_useButton setFrame:(CGRect){ CGRectGetWidth(self.frame) - 38 - buttonMargin, 15, 38 , 34 }];
     }
     
     return _useButton;
