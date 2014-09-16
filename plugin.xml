@@ -446,6 +446,10 @@
 	<resource-file src="platforms/ios/Classes/DBCamera/Resources/filters/ulluwatu/ulluwatu_texture_2.png"/>
 
 	<framework src="QuartzCore.framework"/>
+	<framework src="CoreMedia.framework"/>
+	<framework src="CoreVideo.framework"/>
+	<framework src="OpenGLES.framework"/>
+	<framework src="AVFoundation.framework"/>
 </platform>
 
 </plugin>
